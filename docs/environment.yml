@@ -1,0 +1,8 @@
+name: documentation-environment
+dependencies:
+  - pip:
+      - sphinx-autodoc-typehints
+      - sphinx-rtd-theme
+      - numpy
+      - scipy
+      - lmfit
