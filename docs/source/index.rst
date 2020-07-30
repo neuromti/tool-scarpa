@@ -12,6 +12,17 @@ Welcome to scarpa's documentation!
 
 
 
+API
+---
+
+.. autosummary::
+   :toctree: _autosummary
+   :template: module.rst
+
+   scarpa.generate.template
+
+
+
 Indices and tables
 ==================
 

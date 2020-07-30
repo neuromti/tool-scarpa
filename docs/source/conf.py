@@ -38,9 +38,10 @@ extensions = [
     "sphinx.ext.ifconfig",
     "sphinx.ext.viewcode",
     "sphinx.ext.napoleon",
-    "sphinx.ext.githubpages",
     "sphinx_autodoc_typehints",  # : pip install sphinx-autodoc-typehints
+    "sphinx.ext.githubpages",
     "sphinx_rtd_theme",
+    "sphinx.ext.graphviz",
 ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -51,6 +52,22 @@ templates_path = ["_templates"]
 # This pattern also affects html_static_path and html_extra_path.
 exclude_patterns = []
 
+
+autosummary_generate = True
+add_module_names = False  # use short names for functions and classes
+
+# napoleon docstring parsing
+napoleon_google_docstring = True
+napoleon_numpy_docstring = True
+napoleon_include_init_with_doc = False
+napoleon_include_private_with_doc = False
+napoleon_include_special_with_doc = True
+napoleon_use_admonition_for_examples = False
+napoleon_use_admonition_for_notes = False
+napoleon_use_admonition_for_references = False
+napoleon_use_ivar = False
+napoleon_use_param = True
+napoleon_use_rtype = True
 
 # -- Options for HTML output -------------------------------------------------
 
