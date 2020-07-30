@@ -1,18 +1,18 @@
-from scarpa.generate.shapes import ones, sinus, sawtooth, square
+from scarpa.generate.shapes import *
 import pytest
 
 
 @pytest.mark.parametrize(
-    "foo, elem", [(ones, 1), (sinus, 0), (sawtooth, -1), (square, 1)]
+    "foo",
+    [ones, sinus, sawtooth, square, hanning, gaussian, gaussdiff, mexicanhat, noise,],
 )
 class Test_shapes:
     @pytest.mark.parametrize("plen", [-1, 0, 10.1])
-    def test_shape_raises(self, plen, foo, elem):
+    def test_shape_raises(self, plen, foo):
         with pytest.raises(ValueError):
             foo(plen)
 
-    @pytest.mark.parametrize("plen", [1, 10])
-    def test_shape_valid(self, plen, foo, elem):
+    @pytest.mark.parametrize("plen", [15, 101])
+    def test_shape_valid(self, plen, foo):
         shape = foo(plen)
         assert len(shape) == plen
-        assert shape[0] == elem
