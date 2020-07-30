@@ -21,6 +21,7 @@ API
 
    scarpa.generate.template
    scarpa.generate.modulation
+   scarpa.generate.shapes
 
 
 

@@ -23,7 +23,6 @@ def stack_periodic(template: ndarray, periodcount: float):
     plen = len(template)
     model = np.empty(0)
     reps, remainder = int(periodcount // 1), int(plen * (periodcount % 1))
-
     for rep in range(reps):
         model = np.hstack((model, template))
 
