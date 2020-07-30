@@ -7,6 +7,7 @@ build: clean
 	
 
 docs:
+	rm -rf docs/build/_autosummary
 	make -C docs html
 
 clean:

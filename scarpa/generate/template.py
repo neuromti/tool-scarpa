@@ -1,6 +1,6 @@
+"generate a signal vector using templates"
 import numpy as np
 from numpy import ndarray
-from scipy.interpolate import interp1d
 
 
 def stack_periodic(template: ndarray, periodcount: float):
@@ -30,3 +30,4 @@ def stack_periodic(template: ndarray, periodcount: float):
     model = np.hstack((model, template[:remainder]))
 
     return model
+

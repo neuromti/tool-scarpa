@@ -20,6 +20,7 @@ API
    :template: module.rst
 
    scarpa.generate.template
+   scarpa.generate.modulation
 
 
 
