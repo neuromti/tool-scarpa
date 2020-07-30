@@ -17,7 +17,7 @@
 
 # -- Project information -----------------------------------------------------
 
-project = "scarpa"
+project = "Scarpa"
 copyright = "2020, Robert Guggenberger"
 author = "Robert Guggenberger"
 
