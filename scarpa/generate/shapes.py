@@ -41,7 +41,7 @@ def ones(samples: int) -> ndarray:
 
 def hanning(samples: int) -> ndarray:
     "a hanning window of samples length"
-    return sg.hanning(_validate(samples))
+    return sg.windows.hann(_validate(samples))
 
 
 def noise(samples: int) -> ndarray:
