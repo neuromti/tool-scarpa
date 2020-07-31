@@ -22,9 +22,9 @@ def constraint_template_mean(x, p_len):
 
 
 def constraint_template_range(x, p_len):
-    "constrain the template to always have zero mean"
+    "constrain the template to always have range 2"
     template = x[1 : 1 + p_len]
-    return max(abs(template)) - 1
+    return np.ptp(template) - 2
 
 
 def evaluate(template, p_count, am_anchors, am_interp):
