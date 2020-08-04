@@ -30,3 +30,18 @@ def stack_periodic(template: ndarray, periodcount: float):
 
     return model
 
+
+def activate_template(template: ndarray, actvect: ndarray) -> ndarray:
+    """convolve an activation vector with a period template
+    
+    args
+    ----
+
+    template: ndarray
+        the waveform
+
+    actvect: float
+        the activation vector
+    """
+
+    return np.convolve(actvect, template, mode="same")
