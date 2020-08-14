@@ -1,6 +1,6 @@
 import pytest
 from scarpa.generate.modulation import create_modulation
-from scarpa.generate.template import stack_periodic
+from scarpa.generate.template import stack_template
 from scarpa.generate.shapes import sinus, hanning
 from scarpa.estimate.periodic import fit_with_plen_known, vec2parms
 import numpy as np
@@ -16,7 +16,7 @@ def mixture():
 
     template = sinus(plen)
 
-    pure = stack_periodic(template, periodcount=pcount)
+    pure = stack_template(template, periodcount=pcount)
     data = pure * modulation
     yield data, template, modulation
 

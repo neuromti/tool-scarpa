@@ -3,8 +3,8 @@ import numpy as np
 from numpy import ndarray
 
 
-def stack_periodic(template: ndarray, periodcount: float) -> ndarray:
-    """stack a period signal from a template 
+def stack_template(template: ndarray, periodcount: float) -> ndarray:
+    """stack a template periodically
     
     args
     ----
@@ -68,25 +68,27 @@ if __name__ == "__main__":
         actvect[i] = 1
 
     def bench():
-        stack_periodic(template, periodcount)
+        stack_template(template, periodcount)
 
     setup = "from __main__ import bench"
 
     reps = 100
     number = 100
-    bench = repeat(stmt="bench()", setup=setup, number=number, repeat=reps)
-    bench = [b * 1000 / number for b in bench]
+    bench_out = repeat(stmt="bench()", setup=setup, number=number, repeat=reps)
+    bench_out = [b * 1000 / number for b in bench_out]
     print(
-        "stack_periodic: {0:3.2f} ({1:3.2f}) ms".format(np.mean(bench), np.std(bench))
+        "stack_template: {0:3.2f} ({1:3.2f}) ms".format(
+            np.mean(bench_out), np.std(bench_out)
+        )
     )
 
     def bench():
         activate_template(template, actvect)
 
-    bench = repeat(stmt="bench()", setup=setup, number=number, repeat=reps)
-    bench = [b * 1000 / number for b in bench]
+    bench_out = repeat(stmt="bench()", setup=setup, number=number, repeat=reps)
+    bench_out = [b * 1000 / number for b in bench_out]
     print(
         "activate_template: {0:3.2f} ({1:3.2f}) ms".format(
-            np.mean(bench), np.std(bench)
+            np.mean(bench_out), np.std(bench_out)
         )
     )
