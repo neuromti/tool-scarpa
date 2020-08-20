@@ -7,24 +7,35 @@ import numpy as np
 from numpy import ndarray
 
 #%%
-def pca(data: ndarray, rotation: str = "positive"):
+def pca(
+    data: ndarray, demean: bool = True, scale: bool = True,
+):
     """perform principal component analysis on the raw data matrix
     
     args
     ----
     data: ndarray
         the matrix of variables x observations
+    demean: bool
+        whether to center the data
+    scale: bool
+        whether to divive the data by its std
     
     returns
     -------
-    eigen_vector:ndarray
+    coeffs:ndarray
         the eigenvectors or coefficients of each component
     score: ndarray
         the score of each component
     eigen_value:
         the eigenvalues of each component
     """
-    data -= data.mean(axis=0)
+    data = data.copy()
+    if demean:
+        data -= data.mean(axis=0)
+    if scale:
+        data /= data.std(axis=0, ddof=1)
+
     R = np.cov(data, rowvar=False)
 
     eigen_value, eigen_vector = eigh(R)
@@ -35,21 +46,41 @@ def pca(data: ndarray, rotation: str = "positive"):
 
     eigen_value /= eigen_value.sum(axis=0)
     score = np.dot(eigen_vector.T, data.T).T
-
-    if rotation == "positive":
-        for ei, ev in enumerate(eigen_vector):
-            if ev.mean() < 0:
-                eigen_vector[:, ei] *= -1
-                score[:, ei] *= -1
     return eigen_vector, score, eigen_value
 
 
-def pca_largest(data: ndarray):
-    data -= data.mean(axis=0)
+def pca_largest(
+    data: ndarray, demean: bool = True, scale: bool = True,
+):
+    """return only the strongest principal component 
+    
+    args
+    ----
+    data: ndarray
+        the matrix of variables x observations
+    demean: bool
+        whether to center the data
+    scale: bool
+        whether to divive the data by its std
+    
+    returns
+    -------
+    eigen_vector:ndarray
+        the eigenvectors or coefficients of each component
+    score: ndarray
+        the score of each component
+    eigen_value:
+        the eigenvalues of each component
+    """
+    data = data.copy()
+    if demean:
+        data -= data.mean(axis=0)
+    if scale:
+        data /= data.std(axis=0, ddof=1)
+
     R = np.cov(data, rowvar=False)
     eigen_value, eigen_vector = eigsh(R, 1, which="LM")
     score = np.dot(eigen_vector.T, data.T).T
-    # return eigen_vector[:,0], score[:,0], eigen_value
     return eigen_vector, score, eigen_value
 
 
@@ -72,10 +103,6 @@ def pca_reduce(data: ndarray, dimensions=1):
         coeffs = pca.components_[:, :dimensions].copy()
         scores = pca.fit_transform(x.T)
         return scores[:, :dimensions], coeffs
-
-
-def remove_pca(data: ndarray, periodlen: int, fs: int):
-    pass
 
 
 if __name__ == "__main__":

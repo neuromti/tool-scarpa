@@ -11,8 +11,8 @@ with (this_directory / "readme.md").open(encoding="utf-8") as f:
 
 setup(
     name="scarpa",
-    version="v0.1",
-    description="Periodic non-stationary artifact removal",
+    version="v0.1.1",
+    description="Tools for signal decomposition",
     long_description=long_description,
     long_description_content_type="text/markdown",
     author="Robert Guggenberger",

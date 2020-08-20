@@ -23,7 +23,10 @@ def evaluate(template, actvect):
 
 
 def objective(
-    x: ndarray, data: ndarray, activation_window: int, activation_indices: List[float]
+    x: ndarray,
+    data: ndarray,
+    activation_window: int,
+    activation_indices: List[float],
 ) -> float:
     N: int = len(data)
     mn, template, am = vec2parms(x, activation_window)
@@ -41,7 +44,9 @@ def objective(
     return cost
 
 
-def cut_segments(data: ndarray, pre: int, post: int, indices: List[int]) -> ndarray:
+def cut_segments(
+    data: ndarray, pre: int, post: int, indices: List[int]
+) -> ndarray:
     epochs = []
     for idx in indices:
         _ep = data[idx - pre : idx + pre]
@@ -106,8 +111,16 @@ def deconvolve(
     bnds = [mb] + [tb] * activation_window + [ab] * len(activation_indices)
 
     cons = [
-        {"type": "eq", "fun": constraint_template_mean, "args": [activation_window]},
-        {"type": "eq", "fun": constraint_template_range, "args": [activation_window]},
+        {
+            "type": "eq",
+            "fun": constraint_template_mean,
+            "args": [activation_window],
+        },
+        {
+            "type": "eq",
+            "fun": constraint_template_range,
+            "args": [activation_window],
+        },
     ]
 
     solution = minimize(
@@ -150,7 +163,9 @@ def fit_with_plen_known(data, p_len: int) -> Tuple[float, ndarray, ndarray]:
     p_count: float = N / p_len
 
     # estimate the initial template values
-    template = data[: p_len * int(p_count)].reshape((int(p_count), p_len)).mean(0)
+    template = (
+        data[: p_len * int(p_count)].reshape((int(p_count), p_len)).mean(0)
+    )
     template -= template.mean()
     template /= norm(template)
     template = np.flip(template)
@@ -206,7 +221,9 @@ if __name__ == "__main__":  # pragma: no cover
     template = sinus(plen)
 
     pure = stack_template(template, periodcount=pcount)
-    modulation = create_modulation(anchors=anchors, samples=samples, kind="cubic")
+    modulation = create_modulation(
+        anchors=anchors, samples=samples, kind="cubic"
+    )
     data = pure * modulation
 
     ac = 11
