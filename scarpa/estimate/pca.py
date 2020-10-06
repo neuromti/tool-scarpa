@@ -118,3 +118,4 @@ if __name__ == "__main__":
     ax[0].plot(data.mean(1))
     c, s, v = pca(data)
     ax[1].plot(s[:, 0:2])
+

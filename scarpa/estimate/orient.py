@@ -78,12 +78,13 @@ def orient_principal(
     while convergence > col:
         iterations += 1
         old_c = c
-        flipper = np.ones(data.shape[1])
+        _flipper = np.ones(data.shape[1])
         for tix, t in enumerate(old_c):
             if t < 0:
+                _flipper[tix] = -1
                 flipper[tix] = -1
 
-        data = flipper * data
+        data = _flipper * data
         c, s, v = pca_largest(data, demean=False, scale=False)
         cm = c.mean()
         if cm < 0:
@@ -96,5 +97,5 @@ def orient_principal(
 
     # make sure the negative peak comes first
     if s.argmax() < s.argmin():
-        data *= -1
-    return data
+        flipper *= -1
+    return flipper
