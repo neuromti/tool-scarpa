@@ -91,12 +91,8 @@ def objective(
 
 
 def fit(
-    data,
-    p_len: int,
-    am_count: int,
-    am_interp: str = "nearest",
-    n_components: int = 1,
-) -> Tuple[float, ndarray, ndarray, ndarray]:
+    data, p_len: int, am_count: int, am_interp: str = "nearest", n_components: int = 1,
+) -> Tuple[ndarray, ndarray, ndarray]:
     """estimate template and amplitude modulation with known period length
 
     args
@@ -129,9 +125,7 @@ def fit(
     from scarpa.estimate.fa import factoran
     from scarpa.estimate.pca import pca_reduce
 
-    periodic_data = (
-        data[: p_len * int(p_count)].reshape((int(p_count), p_len)).T
-    )
+    periodic_data = data[: p_len * int(p_count)].reshape((int(p_count), p_len)).T
     # scores = factoran(periodic_data, n_components=n_components)
     scores, _ = pca_reduce(periodic_data.T, dimensions=n_components)
     templates = []
@@ -144,10 +138,7 @@ def fit(
     t_len = n_components * p_len
     # estimate the initial amplitude modulation values
     am = abs(hilbert(data))
-    am = [
-        am[int(idx)]
-        for idx in np.linspace(0, len(data), am_count, endpoint=False)
-    ]
+    am = [am[int(idx)] for idx in np.linspace(0, len(data), am_count, endpoint=False)]
     am = am * n_components
     a_len = am_count * n_components
     # create the vector of initial values for minimize (argument there is x0)
@@ -204,9 +195,7 @@ if __name__ == "__main__":  # pragma: no cover
     template = sinus(plen)
 
     pure = stack_template(template, periodcount=pcount)
-    modulation = create_modulation(
-        anchors=anchors, samples=samples, kind="cubic"
-    )
+    modulation = create_modulation(anchors=anchors, samples=samples, kind="cubic")
     data = pure * modulation
 
     p_len = 100

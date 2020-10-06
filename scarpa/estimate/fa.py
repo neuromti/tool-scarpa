@@ -37,9 +37,7 @@ def derimax(
     """
     from scarpa.estimate.rotation import rotate_hilbert
 
-    _coeffs, _scores, = factoran(
-        data, n_factors=n_factors, demean=demean, scale=scale
-    )
+    _coeffs, _scores, = factoran(data, n_factors=n_factors, demean=demean, scale=scale)
     R = rotate_hilbert(_scores, max_iter=max_iter)
     coeffs = np.dot(_coeffs, R)
     scores = R.dot(_scores.T).T
@@ -67,9 +65,7 @@ def shapemax(
     from scarpa.estimate.rotation import rotate_shape
     from scarpa.generate.shapes import sinus
 
-    _coeffs, _scores, = factoran(
-        data, n_factors=n_factors, demean=demean, scale=scale
-    )
+    _coeffs, _scores, = factoran(data, n_factors=n_factors, demean=demean, scale=scale)
     R = rotate_shape(_scores, shape=shape, max_iter=max_iter)
     coeffs = np.dot(_coeffs, R)
     scores = R.dot(_scores.T).T
@@ -97,9 +93,7 @@ def varimax(
 
     from scarpa.estimate.rotation import rotate_varimax
 
-    _coeffs, _scores, = factoran(
-        data, n_factors=n_factors, demean=demean, scale=scale
-    )
+    _coeffs, _scores, = factoran(data, n_factors=n_factors, demean=demean, scale=scale)
     R = rotate_varimax(_coeffs, gamma=1, max_iter=max_iter)
     coeffs = np.dot(_coeffs, R)
     scores = R.dot(_scores.T).T
@@ -164,7 +158,7 @@ if __name__ == "__main__":
 
     print("Perfect sinus")
     for i in range(1, 10, 1):
-        print(i, f"{validate(*factoran(data, i), data):3.4f}")
+        print(i, f"{validate(*factoran(data, i), data) :3.4f}")  # type: ignore
 
     # if frequency is not fitting into the window, i.e. period is not an
     # integer multiple, it will leak into two sinusoids. THis makes sense, as
@@ -176,9 +170,7 @@ if __name__ == "__main__":
     # transformation
 
     # a drift of 1% makes it very clear
-    sig = np.atleast_2d(
-        np.sin(2 * np.pi * np.linspace(0, p_count * 1.01, s_len))
-    ).T
+    sig = np.atleast_2d(np.sin(2 * np.pi * np.linspace(0, p_count * 1.01, s_len))).T
     sig += np.random.normal(0, n_level, (sig.shape))
     data = np.reshape(sig, (p_count, p_len)).T
 
@@ -214,19 +206,15 @@ if __name__ == "__main__":
 
     print("Frequency drift")
     for i in range(1, 10, 1):
-        print(i, f"{validate(*factoran(data, i), data):3.4f}")
+        print(i, f"{validate(*factoran(data, i), data):3.4f}")  # type: ignore
 
     # similarily, amplitude modulation
-    sig = np.atleast_2d(
-        np.sin(2 * np.pi * np.linspace(0, p_count * 1.0, s_len))
-    ).T
+    sig = np.atleast_2d(np.sin(2 * np.pi * np.linspace(0, p_count * 1.0, s_len))).T
 
     sig += np.random.normal(0, n_level, (sig.shape))
     sig += (
         m_level
-        * np.atleast_2d(
-            np.sin(2 * np.pi * np.linspace(0, p_count * 3, s_len))
-        ).T
+        * np.atleast_2d(np.sin(2 * np.pi * np.linspace(0, p_count * 3, s_len))).T
     )
     sig = np.atleast_2d(sig[:, 0] * (1 + hanning(sig.shape[0]))).T
     # sig[800:850] += hanning(50)[:, np.newaxis]
@@ -258,17 +246,13 @@ if __name__ == "__main__":
 
     print("Amplitude modulation")
     for i in range(1, 10, 1):
-        print(i, f"{validate(*factoran(data, i), data):3.4f}")
+        print(i, f"{validate(*factoran(data, i), data):3.4f}")  # type: ignore
 
     # mixture
-    sigA = np.atleast_2d(
-        np.sin(2 * np.pi * np.linspace(0, p_count * 1, s_len))
-    ).T
+    sigA = np.atleast_2d(np.sin(2 * np.pi * np.linspace(0, p_count * 1, s_len))).T
     sigA = np.atleast_2d(sigA[:, 0] * (1 + sawtooth(sig.shape[0]))).T
 
-    sigB = np.atleast_2d(
-        sg.sawtooth(2 * np.pi * np.linspace(0, p_count * 3, s_len))
-    ).T
+    sigB = np.atleast_2d(sg.sawtooth(2 * np.pi * np.linspace(0, p_count * 3, s_len))).T
     sigB = np.atleast_2d(sigB[:, 0] * (1 - sawtooth(sig.shape[0]))).T
 
     sig = sigA + sigB
@@ -307,7 +291,7 @@ if __name__ == "__main__":
 
     print("Mixture")
     for i in range(1, 10, 1):
-        print(i, f"{validate(*factoran(data, i), data):3.4f}")
+        print(i, f"{validate(*factoran(data, i), data):3.4f}")  # type: ignore
     # # %%
     # fig, ax = plt.subplots(3, 3)
     # for n_comp, ax in enumerate(ax.ravel(), 1):
