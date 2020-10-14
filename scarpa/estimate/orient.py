@@ -32,20 +32,14 @@ def orient_cs(coeffs: ndarray, scores: ndarray):
 
 
 def orient_principal(
-    data: ndarray,
-    col: float = 1e-6,
-    max_iter: int = 10,
-    demean: bool = True,
-    scale: bool = True,
-):
+    data: ndarray, max_iter: int = 10, demean: bool = True, scale: bool = True,
+) -> ndarray:
     """orient data so that the first principal component exhibits only positive coefficients
     
     args
     ----
     data: ndarray
         the matrix of variables x observations
-    col:float
-        the convergence criterion
     max_iter:int
         how many iterations to run at most
     demean: bool
@@ -55,10 +49,13 @@ def orient_principal(
 
     returns
     -------
-    data: ndarray
-        the oriented matrix of variables x observations
+    flipper: ndarray
+        the array to flip the data matrix so that the first component has always positive coefficients
    
     """
+
+    def newflip(data):
+        return np.ones((data.shape[1],))
 
     data = data.copy()
     if demean:
@@ -66,36 +63,19 @@ def orient_principal(
     if scale:
         data /= data.std(axis=0, ddof=1)
 
-    c, s, v = pca_largest(data, demean=False, scale=False)
-    if c.mean() < 0:
-        data = -data
-        c, s, v = pca_largest(data, demean=False, scale=False)
-    iterations = 0
-    convergence = 2
-    flipper = np.ones(data.shape[1])
     # flip individual trials until the first component has only positive
-    # coefficients
-    while convergence > col:
-        iterations += 1
-        old_c = c
-        _flipper = np.ones(data.shape[1])
-        for tix, t in enumerate(old_c):
-            if t < 0:
-                _flipper[tix] = -1
-                flipper[tix] = -1
-
-        data = _flipper * data
+    # first iteration
+    c, s, v = pca_largest(data, demean=False, scale=False)
+    flipper = newflip(data) * np.sign(c[:, 0])
+    finalflipper = newflip(data)
+    data *= flipper
+    finalflipper *= flipper
+    iterations = 0
+    while not np.all(flipper > 0) and iterations < max_iter:
         c, s, v = pca_largest(data, demean=False, scale=False)
-        cm = c.mean()
-        if cm < 0:
-            data = -data
-            c, s, v = pca_largest(data, demean=False, scale=False)
-            cm = c.mean()
-        convergence = norm(old_c - c)
-        if iterations > max_iter:
-            break
+        flipper = newflip(data) * np.sign(c)
+        data *= flipper
+        finalflipper *= flipper
+        iterations += 1
 
-    # make sure the negative peak comes first
-    if s.argmax() < s.argmin():
-        flipper *= -1
-    return flipper
+    return finalflipper
